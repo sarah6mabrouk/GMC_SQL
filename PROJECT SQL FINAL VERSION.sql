@@ -637,21 +637,27 @@ WHERE
 --5. customers who reside in the same region as supplier 1
 
 	-- select data from suppliers : supplier 1:
-	select ADDRESS as 'address supplier', CITY, POSTAL_CODE, COUNTRY FROM SUPPLIERS WHERE SUPPLIER_NUMBER = 1;
+	select ADDRESS as 'address supplier', CITY, POSTAL_CODE, COUNTRY FROM SUPPLIERS WHERE SUPPLIER_NUMBER = 1001;
 
 	--Updating	CITY and POSTAL_CODE just to test the solution code:
-	update SUPPLIERS set CITY = 'Seattle', POSTAL_CODE = 98104  where SUPPLIER_NUMBER = 1;
+	update SUPPLIERS 
+	set CITY = 'Seattle', 
+		POSTAL_CODE = 98104  
+	where SUPPLIER_NUMBER = 1;
 
 
 	-- the solution to : --5. customers who reside in the same region as supplier 1
 
 	SELECT ADDRESS, CITY, POSTAL_CODE, COUNTRY FROM CUSTOMERS 
-	WHERE CITY IN (select CITY FROM SUPPLIERS WHERE SUPPLIER_NUMBER = 1)
-	AND POSTAL_CODE IN (select POSTAL_CODE FROM SUPPLIERS WHERE SUPPLIER_NUMBER = 1) 
+	WHERE CITY IN (select CITY FROM SUPPLIERS WHERE SUPPLIER_NUMBER = 1001)
+	AND POSTAL_CODE IN (select POSTAL_CODE FROM SUPPLIERS WHERE SUPPLIER_NUMBER = 1001) ;
 
 
 	-- Undoing the updates:
-	update SUPPLIERS set CITY = 'London' , POSTAL_CODE = 'EC1 4SD' where SUPPLIER_NUMBER = 1;
+	update SUPPLIERS 
+	set CITY = 'London' , 
+		POSTAL_CODE = 'EC1 4SD' 
+	where SUPPLIER_NUMBER = 1;
 
 
 --6. condition on discount rate for products between 10998 & 11003
@@ -781,7 +787,11 @@ HAVING COUNTRY = 'Switzerland'
 	--The resulting table should display the columns: customer code, company name, and telephone number.
 	-- since there aren't any customer who ordered all products, I left chose 2 products instead of all products
 
-SELECT CUSTOMERS.CUSTOMER_CODE, count(PRODUCT_REF) "Num of orders" , COMPANY, PHONE FROM CUSTOMERS
+SELECT CUSTOMERS.CUSTOMER_CODE, 
+	count(PRODUCT_REF) "Num of orders" , 
+	COMPANY, 
+	PHONE 
+FROM CUSTOMERS
 INNER JOIN ORDERS
 ON ORDERS.CUSTOMER_CODE = CUSTOMERS.CUSTOMER_CODE
 INNER JOIN ORDER_DETAILS
@@ -793,7 +803,9 @@ having count(PRODUCT_REF) >=2;
 -- 11. Display for each customer from France the number of orders they have placed. The resulting table should display the columns: customer code and number of orders.
 	-- changed france to USA
 
-SELECT CUSTOMERS.CUSTOMER_CODE, count(PRODUCT_REF) "Num of orders" FROM CUSTOMERS
+SELECT CUSTOMERS.CUSTOMER_CODE, 
+	count(PRODUCT_REF) "Num of orders" 
+FROM CUSTOMERS
 INNER JOIN ORDERS
 ON ORDERS.CUSTOMER_CODE = CUSTOMERS.CUSTOMER_CODE
 INNER JOIN ORDER_DETAILS
@@ -810,24 +822,12 @@ having COUNTRY = 'USA' ;
 
 --updating one row to make the difference:
 UPDATE ORDERS SET ORDER_DATE = '2020-12-23' where ORDER_NUMBER = 46;
-----
---solution to question 11:
--- not the correct answer
-select 
-	count(ORDER_NUMBER) as "Orders in 2020", 
-	year(ORDER_DATE) as 'Order year' 
-from ORDERS 
-where year(ORDER_DATE) = 2020 or year(ORDER_DATE) = 2024
-group by year(ORDER_DATE);
-
-
-	
-
--- the correct answer
+--Display the number of orders placed in 2020 and 2024, and their difference                    
 SELECT 
 	COUNT(CASE WHEN YEAR(ORDER_DATE) =2020 THEN ORDER_NUMBER END) AS 'ORDERS IN 2020',
 	COUNT(CASE WHEN YEAR(ORDER_DATE) = 2024 THEN ORDER_NUMBER END) AS 'ORDERS IN 2024',
-	ABS(COUNT(CASE WHEN YEAR(ORDER_DATE) =2020 THEN ORDER_NUMBER END) - COUNT(CASE WHEN YEAR(ORDER_DATE) = 2024 THEN ORDER_NUMBER END)) as 'DIFFERENCE'
+	ABS(COUNT(CASE WHEN YEAR(ORDER_DATE) =2020 THEN ORDER_NUMBER END) - 
+		COUNT(CASE WHEN YEAR(ORDER_DATE) = 2024 THEN ORDER_NUMBER END)) as 'DIFFERENCE'
 FROM ORDERS;
 
 
