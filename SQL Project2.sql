@@ -637,17 +637,18 @@ WHERE
 --5. customers who reside in the same region as supplier 1
 
 	-- select data from suppliers : supplier 1:
-	select ADDRESS as 'address supplier', CITY, POSTAL_CODE, COUNTRY FROM SUPPLIERS WHERE SUPPLIER_NUMBER = 1;
+	select ADDRESS as 'address supplier', CITY, POSTAL_CODE, COUNTRY FROM SUPPLIERS WHERE SUPPLIER_NUMBER = 1001;
 
 	--Updating	CITY and POSTAL_CODE just to test the solution code:
-	update SUPPLIERS set CITY = 'Seattle', POSTAL_CODE = 98104  where SUPPLIER_NUMBER = 1;
+	update SUPPLIERS set CITY = 'Seattle', POSTAL_CODE = 98104  where SUPPLIER_NUMBER = 1001;
 
 
 	-- the solution to : --5. customers who reside in the same region as supplier 1
 
 	SELECT ADDRESS, CITY, POSTAL_CODE, COUNTRY FROM CUSTOMERS 
-	WHERE CITY IN (select CITY FROM SUPPLIERS WHERE SUPPLIER_NUMBER = 1)
-	AND POSTAL_CODE IN (select POSTAL_CODE FROM SUPPLIERS WHERE SUPPLIER_NUMBER = 1) 
+	WHERE CITY IN (select CITY FROM SUPPLIERS WHERE SUPPLIER_NUMBER = 1001)
+	AND POSTAL_CODE IN (select POSTAL_CODE FROM SUPPLIERS WHERE SUPPLIER_NUMBER = 1001) ;
+
 
 
 	-- Undoing the updates:
